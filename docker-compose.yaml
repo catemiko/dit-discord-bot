@@ -1,0 +1,28 @@
+services:
+  bot:
+    container_name: dit-roles-bot
+    image: dit-roles:v0.0.1
+    build: .
+    ports:
+      - 8080:80
+    links:
+      - db
+    environment:
+      BOT_TOKEN: <token>
+      DATABASE_URL: <database_url>
+
+  db:
+    container_name: dit-postgresql
+    image: postgres:16
+    restart: always
+    volumes:
+      - ./psql-initdb:/docker-entrypoint-initdb.d/
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dit
+      POSTGRES_USER: <database_user>
+      POSTGRES_PASSWORD: <database_password>
+
+volumes:
+    db:
+      external: false
